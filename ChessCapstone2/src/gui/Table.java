@@ -3,6 +3,9 @@ package gui;
 import java.awt.*;
 
 import javax.swing.SwingUtilities;
+
+import engine.RandomMover;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.event.MouseEvent;
@@ -147,6 +150,10 @@ public class Table {
 							public void run() {
 								boardPanel.drawBoard(ChessGame.getBoard());
 								printDisplayTable();
+								if(ChessGame.getCurrentTurn() == Side.BLACK) {
+									Move toMove = RandomMover.makeRandomMove(ChessGame, Side.BLACK);
+									ChessGame.movePiece(toMove.getPrev(), toMove.getDest());
+								}
 							}
 						});
 					}			

@@ -1,6 +1,9 @@
 package pieces;
+import java.util.ArrayList;
+
 import enums.*;
 import game.Board;
+import game.Move;
 
 public abstract class Piece {
 	private BoardSquare square;
@@ -74,8 +77,16 @@ public abstract class Piece {
 	public int getFileChange(BoardSquare dest) {
 		return Math.abs(Integer.parseInt(BoardSquare.valueOf(dest).substring(0,1))-Integer.parseInt(BoardSquare.valueOf(getBoardSquare()).substring(0,1)));
 	}
+	public ArrayList<Move> getPossibleMoveList(Board board) {
+		ArrayList<Move> possibleMoves = new ArrayList<Move>();
+		for(BoardSquare i: BoardSquare.values()) {
+			if(i != BoardSquare.z0 && this.checkBasicLegality(i) && board.getTile(i).getPiece().getSide() != this.getSide()) {
+				possibleMoves.add(new Move(this.getBoardSquare(),i));
+			}
+		}
+		return possibleMoves;
+	}
 	public abstract boolean checkBasicLegality(BoardSquare dest);
-
 	public abstract PieceType getPieceType();
 	public abstract String toDisplayString();
 }

@@ -10,7 +10,8 @@ public class SpecificPieceLegalityCheck {
 				if(game.getBoard().getTile(BoardSquare.h1).getPiece().getPieceType() == PieceType.ROOK && 
 						game.getBoard().getTile(BoardSquare.h1).getPiece().getSide() == Side.WHITE) {
 					if(game.getBoard().getTile(BoardSquare.f1).getPiece().getPieceType() == PieceType.EMPTY && 
-							game.getBoard().getTile(BoardSquare.g1).getPiece().getPieceType() == PieceType.EMPTY && !game.getBoard().getTile(BoardSquare.h1).getPiece().hasMoved()) {
+							game.getBoard().getTile(BoardSquare.g1).getPiece().getPieceType() == PieceType.EMPTY && 
+							!game.getBoard().getTile(BoardSquare.h1).getPiece().hasMoved()) {
 						return true;
 					}
 				} 
@@ -19,7 +20,8 @@ public class SpecificPieceLegalityCheck {
 						game.getBoard().getTile(BoardSquare.a1).getPiece().getSide() == Side.WHITE) {
 					if(game.getBoard().getTile(BoardSquare.b1).getPiece().getPieceType() == PieceType.EMPTY && 
 							game.getBoard().getTile(BoardSquare.c1).getPiece().getPieceType() == PieceType.EMPTY && 
-							game.getBoard().getTile(BoardSquare.d1).getPiece().getPieceType() == PieceType.EMPTY && !game.getBoard().getTile(BoardSquare.a1).getPiece().hasMoved()) {
+							game.getBoard().getTile(BoardSquare.d1).getPiece().getPieceType() == PieceType.EMPTY && 
+							!game.getBoard().getTile(BoardSquare.a1).getPiece().hasMoved()) {
 						return true;
 					}
 				} 
@@ -31,7 +33,8 @@ public class SpecificPieceLegalityCheck {
 				if(game.getBoard().getTile(BoardSquare.h8).getPiece().getPieceType() == PieceType.ROOK && 
 						game.getBoard().getTile(BoardSquare.h8).getPiece().getSide() == Side.BLACK) {
 					if(game.getBoard().getTile(BoardSquare.f8).getPiece().getPieceType() == PieceType.EMPTY && 
-							game.getBoard().getTile(BoardSquare.g8).getPiece().getPieceType() == PieceType.EMPTY && !game.getBoard().getTile(BoardSquare.h8).getPiece().hasMoved()) {
+							game.getBoard().getTile(BoardSquare.g8).getPiece().getPieceType() == PieceType.EMPTY && 
+							!game.getBoard().getTile(BoardSquare.h8).getPiece().hasMoved()) {
 						return true;
 					}
 				}
@@ -40,7 +43,8 @@ public class SpecificPieceLegalityCheck {
 						game.getBoard().getTile(BoardSquare.a8).getPiece().getSide() == Side.BLACK) {
 					if(game.getBoard().getTile(BoardSquare.b8).getPiece().getPieceType() == PieceType.EMPTY && 
 							game.getBoard().getTile(BoardSquare.c8).getPiece().getPieceType() == PieceType.EMPTY && 
-							game.getBoard().getTile(BoardSquare.d8).getPiece().getPieceType() == PieceType.EMPTY && !game.getBoard().getTile(BoardSquare.a8).getPiece().hasMoved()) {
+							game.getBoard().getTile(BoardSquare.d8).getPiece().getPieceType() == PieceType.EMPTY && 
+							!game.getBoard().getTile(BoardSquare.a8).getPiece().hasMoved()) {
 						return true;
 					}
 				}

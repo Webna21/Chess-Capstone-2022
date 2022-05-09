@@ -8,7 +8,9 @@ public class Game {
 	private ArrayList<String> scoreSheet;
 	private int numMoves;
 	private Side currentTurn;
-	private boolean checkStatus;
+	private boolean wCheckStatus;
+	private boolean bCheckStatus;
+	
 	public Game(Side side) {
 		gameBoard = new Board(side);
 		scoreSheet = new ArrayList<String>();
@@ -24,7 +26,8 @@ public class Game {
 		 * Turn
 		 * more in notebook
 		 */
-		checkStatus = false; 
+		wCheckStatus = false; 
+		bCheckStatus = false;
 	}
 	public Side getCurrentTurn() {
 		return currentTurn;
@@ -32,11 +35,17 @@ public class Game {
 	public Board getBoard() {
 		return gameBoard;
 	}
-	public boolean getCheckStatus() {
-		return checkStatus;
+	public boolean getWCheckStatus() {
+		return wCheckStatus;
 	}
-	public void setCheckStatus(boolean check) {
-		checkStatus = check;
+	public boolean getBCheckStatus() {
+		return bCheckStatus;
+	}
+	public void setWCheckStatus(boolean check) {
+		wCheckStatus = check;
+	}
+	public void setBCheckStatus(boolean check) {
+		bCheckStatus = check;
 	}
 	public void movePiece(BoardSquare x, BoardSquare y) {
 		if(moveLegality(x,y)) {
@@ -94,6 +103,7 @@ public class Game {
 	}
 	public void moveInspection(BoardSquare x, BoardSquare y) {
 		gameBoard.getTile(x).getPiece().incrementTimesMoved();
+		inspectCheckStatus();
 	}
 	public boolean moveLegality(BoardSquare x, BoardSquare y) {
 		//only move whoevers turns it is pieces
@@ -104,8 +114,46 @@ public class Game {
 		if(gameBoard.getTile(x).getPiece().getPieceType() == PieceType.PAWN && gameBoard.getTile(y).getPiece().getSide() == (currentTurn == Side.WHITE ? Side.BLACK : Side.WHITE));
 		//check basic legality
 		if(gameBoard.getTile(x).getPiece().checkBasicLegality(y) == false) return false;
+		//check checkstatus'
+		
 		
 		return true;
+	}
+	public void inspectCheckStatus() {
+		ArrayList<Move> whiteMoves = new ArrayList<Move>();
+		ArrayList<Move> blackMoves = new ArrayList<Move>();
+		
+		for(BoardSquare i: BoardSquare.values()) {
+			if(this.getBoard().getTile(i).getPiece().getPossibleMoveList(this.getBoard()).size() != 0 && this.getBoard().getTile(i).getPiece().getSide() == Side.WHITE) {
+				ArrayList<Move> attempt = this.getBoard().getTile(i).getPiece().getPossibleMoveList(this.getBoard());
+				for(Move j: attempt) {
+					whiteMoves.add(j);
+				}
+			}
+		}
+		for(BoardSquare i: BoardSquare.values()) {
+			if(this.getBoard().getTile(i).getPiece().getPossibleMoveList(this.getBoard()).size() != 0 && this.getBoard().getTile(i).getPiece().getSide() == Side.BLACK) {
+				ArrayList<Move> attempt = this.getBoard().getTile(i).getPiece().getPossibleMoveList(this.getBoard());
+				for(Move j: attempt) {
+					blackMoves.add(j);
+				}
+			}
+		}
+		
+		for(Move i: whiteMoves) {
+			if(gameBoard.getTile(i.getDest()).getPiece().getPieceType() == PieceType.KING) {
+				bCheckStatus = true;
+			} else {
+				bCheckStatus = false;
+			}
+		}
+		for(Move i: blackMoves) {
+			if(gameBoard.getTile(i.getDest()).getPiece().getPieceType() == PieceType.KING) {
+				wCheckStatus = true;
+			} else {
+				wCheckStatus = false;
+			}
+		}
 	}
 	public static BoardSquare[] inputMove(String input1, String input2) {
 		BoardSquare x = BoardSquare.toBoardSquare(input1.substring(0,1), Integer.parseInt(input1.substring(1,2)));
