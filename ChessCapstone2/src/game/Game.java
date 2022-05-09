@@ -48,13 +48,17 @@ public class Game {
 		bCheckStatus = check;
 	}
 	public void movePiece(BoardSquare x, BoardSquare y) {
-		if(moveLegality(x,y)) {
+		if(moveLegality(x,y) && currentTurn != Side.NEUTRAL) {
 			if(currentTurn == Side.WHITE) numMoves++;
 
 			moveInspection(x,y);
 			writeScoreSheet(x,y);
 			gameBoard.movePiece(x,y);
-			currentTurn = currentTurn == Side.WHITE ? Side.BLACK : Side.WHITE;
+			if(currentTurn != Side.NEUTRAL) currentTurn = currentTurn == Side.WHITE ? Side.BLACK : Side.WHITE;
+			if(currentTurn == Side.NEUTRAL) {
+				System.out.println("GAME OVER, CHECKMATE");
+			}
+			
 		} else System.out.println("illegal move");
 	}
 	public void castleKing(BoardSquare x, BoardSquare y) {
@@ -103,6 +107,9 @@ public class Game {
 	}
 	public void moveInspection(BoardSquare x, BoardSquare y) {
 		gameBoard.getTile(x).getPiece().incrementTimesMoved();
+		if(gameBoard.getTile(y).getPiece().getPieceType() == PieceType.KING) {
+			currentTurn = Side.NEUTRAL;
+		}
 		inspectCheckStatus();
 	}
 	public boolean moveLegality(BoardSquare x, BoardSquare y) {
