@@ -1,6 +1,7 @@
 package pieces;
 import enums.*;
 import game.Board;
+import game.SpecificPieceLegalityCheck;
 
 public class Pawn extends Piece {
 	private PieceType type;
@@ -26,7 +27,11 @@ public class Pawn extends Piece {
 				correctDirection = true;
 			}
 		}
-		return rankChange <= 2 && fileChange == 0 && correctDirection;
+		boolean clearPath = SpecificPieceLegalityCheck.pawnPathCheck(this.getBoard(),this.getBoardSquare(),dest);
+		if(rankChange == 2 && this.getNumTimesMoved()!=0) {
+			return false;
+		}
+		return rankChange <= 2 && fileChange == 0 && correctDirection && clearPath;
 	}
 	public PieceType getPieceType() {
 		return type;

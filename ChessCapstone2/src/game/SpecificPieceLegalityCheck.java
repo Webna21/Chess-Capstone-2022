@@ -149,17 +149,34 @@ public class SpecificPieceLegalityCheck {
 	}
 	public static boolean pawnPathCheck(Board board, BoardSquare prev, BoardSquare dest) {
 		boolean clearPath = true;
-		if(BoardSquare.getRank(prev) < BoardSquare.getRank(dest)) {
-			if(board.getTile(BoardSquare.toBoardSquare(BoardSquare.getFile(prev), BoardSquare.getRank(prev)+1)).hasPiece()) {
+		if(Math.abs(BoardSquare.getRank(dest)-BoardSquare.getRank(prev)) == 1) {
+			if(BoardSquare.getRank(prev) < BoardSquare.getRank(dest)) {
+				if(board.getTile(BoardSquare.toBoardSquare(BoardSquare.getFile(prev), BoardSquare.getRank(prev)+1)).hasPiece()) {
+					clearPath = false;
+				}
+			} else if(BoardSquare.getRank(prev) > BoardSquare.getRank(dest)) {
+				if(board.getTile(BoardSquare.toBoardSquare(BoardSquare.getFile(prev), BoardSquare.getRank(prev)-1)).hasPiece()) {
+					clearPath = false;
+				}
+			} else {
 				clearPath = false;
 			}
-		} else if(BoardSquare.getRank(prev) > BoardSquare.getRank(dest)) {
-			if(board.getTile(BoardSquare.toBoardSquare(BoardSquare.getFile(prev), BoardSquare.getRank(prev)-1)).hasPiece()) {
+		} else if(Math.abs(BoardSquare.getRank(dest)-BoardSquare.getRank(prev)) == 2) {
+			if(BoardSquare.getRank(prev) < BoardSquare.getRank(dest)) {
+				if(board.getTile(BoardSquare.toBoardSquare(BoardSquare.getFile(prev), BoardSquare.getRank(prev)+1)).hasPiece() || board.getTile(BoardSquare.toBoardSquare(BoardSquare.getFile(prev), BoardSquare.getRank(prev)+2)).hasPiece()) {
+					clearPath = false;
+				}
+			} else if(BoardSquare.getRank(prev) > BoardSquare.getRank(dest)) {
+				if(board.getTile(BoardSquare.toBoardSquare(BoardSquare.getFile(prev), BoardSquare.getRank(prev)-1)).hasPiece() || board.getTile(BoardSquare.toBoardSquare(BoardSquare.getFile(prev), BoardSquare.getRank(prev)-2)).hasPiece()) {
+					clearPath = false;
+				}
+			} else {
 				clearPath = false;
 			}
 		} else {
 			clearPath = false;
 		}
+		
 		return clearPath;
 	}
 }

@@ -4,7 +4,7 @@ import java.awt.*;
 
 import javax.swing.SwingUtilities;
 
-import engine.RandomMover;
+import engine.*;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -150,10 +150,15 @@ public class Table {
 							public void run() {
 								boardPanel.drawBoard(ChessGame.getBoard());
 								printDisplayTable();
+								
 								if(ChessGame.getCurrentTurn() == Side.BLACK) {
-									Move toMove = RandomMover.makeRandomMove(ChessGame, Side.BLACK);
+									Move toMove = RandomMoverWithCapture.makeRandomMoveWithCapture(ChessGame, Side.BLACK);
+									ChessGame.movePiece(toMove.getPrev(), toMove.getDest());
+								} else {
+									Move toMove = RandomMoverWithCapture.makeRandomMoveWithCapture(ChessGame, Side.WHITE);
 									ChessGame.movePiece(toMove.getPrev(), toMove.getDest());
 								}
+								
 							}
 						});
 					}			
@@ -204,10 +209,10 @@ public class Table {
 		String currentMover = String.valueOf(ChessGame.getCurrentTurn()).substring(0,1).toLowerCase();
 		if(ChessGame.getBoard().getBotSide() == Side.WHITE) {
 			System.out.println("FEN: " + FEN.WhiteToFEN(ChessGame.getBoard().displayBoardtoArrayList()) + " " + currentMover + " " + ChessGame.castlingForFEN());
-			System.out.println("url: " + "https://lichess.org/analysis/" + FEN.WhiteToFEN(ChessGame.getBoard().displayBoardtoArrayList()) + "_" + currentMover + "_" + ChessGame.castlingForFEN());
+//			System.out.println("url: " + "https://lichess.org/analysis/" + FEN.WhiteToFEN(ChessGame.getBoard().displayBoardtoArrayList()) + "_" + currentMover + "_" + ChessGame.castlingForFEN());
 		} else {
 			System.out.println("FEN: " + FEN.BlackToFEN(ChessGame.getBoard().displayBoardtoArrayList()) + " " + currentMover + " " + ChessGame.castlingForFEN());
-			System.out.println("url: " + "https://lichess.org/analysis/" + FEN.BlackToFEN(ChessGame.getBoard().displayBoardtoArrayList()) + "_" + currentMover + "_" + ChessGame.castlingForFEN());
+//			System.out.println("url: " + "https://lichess.org/analysis/" + FEN.BlackToFEN(ChessGame.getBoard().displayBoardtoArrayList()) + "_" + currentMover + "_" + ChessGame.castlingForFEN());
 		}
 		System.out.println("PGN: " + PGN.toPGN(ChessGame.getScoreSheet()));
 		System.out.println("-----------------------------------------------------------");

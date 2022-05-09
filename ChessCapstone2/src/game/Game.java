@@ -10,11 +10,13 @@ public class Game {
 	private Side currentTurn;
 	private boolean wCheckStatus;
 	private boolean bCheckStatus;
+	private Side lastSideMover;
 	
 	public Game(Side side) {
 		gameBoard = new Board(side);
 		scoreSheet = new ArrayList<String>();
 		numMoves = 0;
+		lastSideMover = Side.BLACK;
 		currentTurn = Side.WHITE;
 		/*
 		 * TODO:
@@ -50,13 +52,14 @@ public class Game {
 	public void movePiece(BoardSquare x, BoardSquare y) {
 		if(moveLegality(x,y) && currentTurn != Side.NEUTRAL) {
 			if(currentTurn == Side.WHITE) numMoves++;
-
+			if(currentTurn != Side.NEUTRAL) lastSideMover = currentTurn;
 			moveInspection(x,y);
 			writeScoreSheet(x,y);
 			gameBoard.movePiece(x,y);
 			if(currentTurn != Side.NEUTRAL) currentTurn = currentTurn == Side.WHITE ? Side.BLACK : Side.WHITE;
 			if(currentTurn == Side.NEUTRAL) {
-				System.out.println("GAME OVER, CHECKMATE");
+				System.out.println("GAME OVER, CHECKMATE.");
+				System.out.println(Side.toString(lastSideMover) + " WINS!");
 			}
 			
 		} else System.out.println("illegal move");
@@ -150,15 +153,11 @@ public class Game {
 		for(Move i: whiteMoves) {
 			if(gameBoard.getTile(i.getDest()).getPiece().getPieceType() == PieceType.KING) {
 				bCheckStatus = true;
-			} else {
-				bCheckStatus = false;
 			}
 		}
 		for(Move i: blackMoves) {
 			if(gameBoard.getTile(i.getDest()).getPiece().getPieceType() == PieceType.KING) {
 				wCheckStatus = true;
-			} else {
-				wCheckStatus = false;
 			}
 		}
 	}
@@ -219,6 +218,8 @@ public class Game {
 		System.out.println("----------------");
 		System.out.println("scoreSheet: " + scoreSheet);
 		System.out.println("currentTurn: " + currentTurn);
+		System.out.println("wCheck: " + wCheckStatus);
+		System.out.println("bCheck: " + bCheckStatus);
 		System.out.println();
 	}
 	public void printGame() {

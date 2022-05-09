@@ -15,6 +15,9 @@ public class Move {
 	public BoardSquare getDest() {
 		return dest;
 	}
+	public boolean isCapture(Board board) {
+		return board.getTile(dest).getPiece().getPieceType() != PieceType.EMPTY;
+	}
 	public String toString() {
 		return BoardSquare.getFile(prev) + BoardSquare.getRank(prev) + "->" + BoardSquare.getFile(dest) + BoardSquare.getRank(dest);
 	}
