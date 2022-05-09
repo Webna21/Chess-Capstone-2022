@@ -2,6 +2,8 @@ package game;
 
 import java.util.*;
 import enums.*;
+import pieces.Empty;
+import pieces.Queen;
 
 public class Game {
 	private Board gameBoard;
@@ -101,10 +103,33 @@ public class Game {
 	}
 	public void pawnCapture(BoardSquare x, BoardSquare y) {
 		if(SpecificPieceLegalityCheck.pawnCaptureLegality(this, x, y) && gameBoard.getTile(x).getPiece().getSide() == currentTurn) {
+			if(BoardSquare.getRank(y) == 1 || BoardSquare.getRank(y) == 8) {
+				promotePawn(x,y);
+			} else {
+				if(currentTurn == Side.WHITE) numMoves++;
+				gameBoard.getTile(x).getPiece().incrementTimesMoved();
+				gameBoard.movePiece(x, y);
+				pawnCaptureWriteScoreSheet(x,y);
+				currentTurn = currentTurn == Side.WHITE ? Side.BLACK : Side.WHITE;
+			}
+		}
+	}
+	public void promotePawn(BoardSquare x, BoardSquare y) {
+		if(!gameBoard.getTile(y).hasPiece() && gameBoard.getTile(x).getPiece().getPieceType() == PieceType.PAWN && Math.abs(BoardSquare.getRank(y)-BoardSquare.getRank(x))==1) {
 			if(currentTurn == Side.WHITE) numMoves++;
 			gameBoard.getTile(x).getPiece().incrementTimesMoved();
-			gameBoard.movePiece(x, y);
-			pawnCaptureWriteScoreSheet(x,y);
+
+			String toPieceNotation;
+			if(gameBoard.getTile(x).getPiece().getSide() == Side.WHITE) {
+				gameBoard.getTile(y).setPiece(new Queen(BoardSquare.getFile(y),BoardSquare.getRank(y),Side.WHITE,gameBoard));
+				gameBoard.getTile(x).setPiece(new Empty(BoardSquare.getFile(x),BoardSquare.getRank(x),gameBoard));
+				toPieceNotation = "Q";
+			} else {
+				gameBoard.getTile(y).setPiece(new Queen(BoardSquare.getFile(y),BoardSquare.getRank(y),Side.BLACK,gameBoard));
+				gameBoard.getTile(x).setPiece(new Empty(BoardSquare.getFile(x),BoardSquare.getRank(x),gameBoard));
+				toPieceNotation = "q";
+			}
+			basicWriteScoreSheet(BoardSquare.getFile(x)+ "x" + BoardSquare.getFile(y) + "=" + toPieceNotation);
 			currentTurn = currentTurn == Side.WHITE ? Side.BLACK : Side.WHITE;
 		}
 	}

@@ -138,6 +138,8 @@ public class Table {
 							} else if(movingPiece.getPieceType() == PieceType.PAWN && Math.abs(destinationTile.getRank()-sourceTile.getRank()) == 1 &&
 									Math.abs(BoardSquare.getFileValue(destinationTile.getBoardSquare()) - BoardSquare.getFileValue(sourceTile.getBoardSquare())) == 1) {
 								ChessGame.pawnCapture(sourceTile.getBoardSquare(), destinationTile.getBoardSquare());
+							} else if(sourceTile.getPiece().getPieceType() == PieceType.PAWN && (destinationTile.getRank() == 1 || destinationTile.getRank() == 8)){
+								ChessGame.promotePawn(sourceTile.getBoardSquare(),destinationTile.getBoardSquare());
 							} else {
 								ChessGame.movePiece(sourceTile.getBoardSquare(), destinationTile.getBoardSquare());
 								sourceTile = null;
@@ -150,7 +152,7 @@ public class Table {
 							public void run() {
 								boardPanel.drawBoard(ChessGame.getBoard());
 								printDisplayTable();
-								
+								/*
 								if(ChessGame.getCurrentTurn() == Side.BLACK) {
 									Move toMove = RandomMoverWithCapture.makeRandomMoveWithCapture(ChessGame, Side.BLACK);
 									ChessGame.movePiece(toMove.getPrev(), toMove.getDest());
@@ -158,7 +160,7 @@ public class Table {
 									Move toMove = RandomMoverWithCapture.makeRandomMoveWithCapture(ChessGame, Side.WHITE);
 									ChessGame.movePiece(toMove.getPrev(), toMove.getDest());
 								}
-								
+								*/
 							}
 						});
 					}			
