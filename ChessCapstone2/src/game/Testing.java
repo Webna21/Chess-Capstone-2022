@@ -3,9 +3,6 @@ package game;
 import java.util.ArrayList;
 
 import enums.*;
-import gui.*;
-import other.*;
-import pieces.*;
 
 public class Testing {
 	public static void main(String[] args) {
