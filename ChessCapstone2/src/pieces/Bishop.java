@@ -13,7 +13,7 @@ public class Bishop extends Piece {
 		super(square, side, board);
 		type = PieceType.BISHOP;
 	}
-	public boolean checkBasicLegality(BoardSquare dest) {
+	public boolean checkBasicLegality(Board board,BoardSquare dest) {
 		int rankChange = Math.abs(BoardSquare.getRank(dest)-getRank());
 		int fileChange = Math.abs(Integer.parseInt(BoardSquare.valueOf(dest).substring(0,1))-Integer.parseInt(BoardSquare.valueOf(getBoardSquare()).substring(0,1)));
 		boolean clearPath = SpecificPieceLegalityCheck.bishopPathCheck(this.getBoard(), this.getBoardSquare(), dest);
@@ -21,6 +21,9 @@ public class Bishop extends Piece {
 	}
 	public PieceType getPieceType() {
 		return type;
+	}
+	public int getPieceValue() {
+		return 3;
 	}
 	public String toDisplayString() {
 		return (side == Side.WHITE) ? "B" : "b";

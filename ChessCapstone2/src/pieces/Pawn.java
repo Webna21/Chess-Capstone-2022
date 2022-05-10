@@ -13,25 +13,34 @@ public class Pawn extends Piece {
 		super(square, side, board);
 		type = PieceType.PAWN;
 	}
-	public boolean checkBasicLegality(BoardSquare dest) {
+	public boolean checkBasicLegality(Board board, BoardSquare dest) {
 		int rankChange = Math.abs(BoardSquare.getRank(dest)-this.getRank());
 		int fileChange = Math.abs(Integer.parseInt(BoardSquare.valueOf(dest).substring(0,1))-Integer.parseInt(BoardSquare.valueOf(getBoardSquare()).substring(0,1)));
-		
+		boolean isOnlyMove = board.getTile(dest).getFile().equals(this.getFile());
 		boolean correctDirection = false;
 		if(this.getSide() == Side.WHITE) {
 			if(BoardSquare.getRank(dest) > BoardSquare.getRank(this.getBoardSquare())) {
 				correctDirection = true;
 			}
-		} else {
+		} else if(this.getSide() == Side.BLACK) {
 			if(BoardSquare.getRank(dest) < BoardSquare.getRank(this.getBoardSquare())) {
 				correctDirection = true;
 			}
+		} else {
+			correctDirection = false;
 		}
 		boolean clearPath = SpecificPieceLegalityCheck.pawnPathCheck(this.getBoard(),this.getBoardSquare(),dest);
 		if(rankChange == 2 && this.getNumTimesMoved()!=0) {
 			return false;
 		}
-		return rankChange <= 2 && fileChange == 0 && correctDirection && clearPath;
+		if(isOnlyMove) {
+			return (rankChange <= 2 && fileChange == 0) && correctDirection && clearPath;
+		} else {
+			return rankChange == 1 && fileChange == 1 && board.getTile(dest).hasPiece() && board.getTile(dest).getPiece().getSide() != this.getSide() && correctDirection;
+		}
+	}
+	public int getPieceValue() {
+		return 1;
 	}
 	public PieceType getPieceType() {
 		return type;

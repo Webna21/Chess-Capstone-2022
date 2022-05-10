@@ -3,6 +3,7 @@ package engine;
 import java.util.ArrayList;
 
 import enums.BoardSquare;
+import enums.Move;
 import enums.Side;
 import game.*;
 

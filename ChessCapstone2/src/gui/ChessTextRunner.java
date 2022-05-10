@@ -54,7 +54,7 @@ public class ChessTextRunner {
 					Math.abs(BoardSquare.getFileValue(b2) - BoardSquare.getFileValue(b1)) == 1) {
 				a.pawnCapture(b1, b2);
 			} else {
-				a.movePiece(b1, b2);
+				a.movePiece(a.getBoard(),b1, b2);
 			}
 		}
 	}

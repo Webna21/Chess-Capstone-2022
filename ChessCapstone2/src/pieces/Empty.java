@@ -12,8 +12,11 @@ public class Empty extends Piece {
 		super(square, Side.NEUTRAL, board);
 		type = PieceType.EMPTY;
 	}
-	public boolean checkBasicLegality(BoardSquare dest) {
+	public boolean checkBasicLegality(Board board,BoardSquare dest) {
 		return false;
+	}
+	public int getPieceValue() {
+		return 0;
 	}
 	public PieceType getPieceType() {
 		return type;

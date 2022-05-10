@@ -1,6 +1,6 @@
-package game;
+package enums;
 
-import enums.*;
+import game.Board;
 
 public class Move {
 	private BoardSquare prev;
