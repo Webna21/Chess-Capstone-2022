@@ -3,6 +3,7 @@ package game;
 import java.util.*;
 import enums.*;
 import pieces.Empty;
+import pieces.King;
 import pieces.Queen;
 
 public class Game {
@@ -33,6 +34,15 @@ public class Game {
 		wCheckStatus = false; 
 		bCheckStatus = false;
 	}
+	public Game(Game game) {
+		gameBoard = game.getBoard();
+		scoreSheet = game.getScoreSheet();
+		numMoves = game.getNumMoves();
+		currentTurn = game.getCurrentTurn();
+		wCheckStatus = game.getWCheckStatus();
+		bCheckStatus = game.getBCheckStatus();
+		lastSideMover = game.getLastSideMover();
+	}
 	public Side getCurrentTurn() {
 		return currentTurn;
 	}
@@ -51,6 +61,24 @@ public class Game {
 	public void setBCheckStatus(boolean check) {
 		bCheckStatus = check;
 	}
+	public Game getGame() {
+		return this;
+	}
+	public void setBoard(Board board) {
+		gameBoard = board;
+	}
+	public void setScoreSheet(ArrayList<String> scoreSheet) {
+		this.scoreSheet = scoreSheet;
+	}
+	public void setNumMoves(int n) {
+		numMoves = n;
+	}
+	public void setCurrentTurn(Side s) {
+		currentTurn = s;
+	}
+	public void setLastSideMover(Side s) {
+		lastSideMover = s;
+	}
 	public void movePiece(Board board,BoardSquare x, BoardSquare y) {
 		if(moveLegality(board,x,y) && currentTurn != Side.NEUTRAL) {
 			if(currentTurn == Side.WHITE) numMoves++;
@@ -58,13 +86,16 @@ public class Game {
 			moveInspection(x,y);
 			writeScoreSheet(x,y);
 			gameBoard.movePiece(x,y);
-			if(currentTurn != Side.NEUTRAL) currentTurn = currentTurn == Side.WHITE ? Side.BLACK : Side.WHITE;
+			if(currentTurn != Side.NEUTRAL) currentTurn = currentTurn == Side.WHITE ? Side.BLACK : Side.WHITE;	
 			if(currentTurn == Side.NEUTRAL) {
 				System.out.println("GAME OVER, CHECKMATE.");
 				System.out.println(Side.toString(lastSideMover) + " WINS!");
 			}
 			
 		} else System.out.println("illegal move");
+	}
+	public void testMovePiece(Board board, BoardSquare x, BoardSquare y) {
+		board.movePiece(x, y);
 	}
 	public void movePiece(Board board,Move move) {
 		movePiece(board,move.getPrev(),move.getDest());
@@ -152,9 +183,13 @@ public class Game {
 		if(gameBoard.getTile(x).getPiece().getPieceType() == PieceType.PAWN && gameBoard.getTile(y).getPiece().getSide() == (currentTurn == Side.WHITE ? Side.BLACK : Side.WHITE));
 		//check basic legality
 		if(gameBoard.getTile(x).getPiece().checkBasicLegality(board,y) == false) return false;
-		//check checkstatus'
-		
-		
+		if(gameBoard.getTile(x).getPiece().getPieceType() == PieceType.KING) {
+			if(gameBoard.getTile(x).getPiece().getSide() == Side.WHITE) {
+				if(!King.checkAdvancedLegality(board, x, y, Side.WHITE)) return false;
+			} else {
+				if(!King.checkAdvancedLegality(board, x, y, Side.BLACK)) return false;
+			}
+		}
 		return true;
 	}
 	public void inspectCheckStatus() {
@@ -222,9 +257,6 @@ public class Game {
 		if(currentTurn == Side.WHITE) move.insert(0,numMoves + ".");
 		scoreSheet.add(move.toString());
 	}
-	public Game copyOfGame() {
-		return this;
-	}
 	public String castlingForFEN() {
 		String a = "";
 		boolean WKingMoved = gameBoard.getTile("e",1).getPiece().getPieceType() != PieceType.KING || gameBoard.getTile("e",1).getPiece().hasMoved();
@@ -243,6 +275,12 @@ public class Game {
 			if(BaRookMoved==false) a += "q";
 		}
 		return a;
+	}
+	public int getNumMoves() {
+		return numMoves;
+	}
+	public Side getLastSideMover() {
+		return lastSideMover;
 	}
 	public void printDisplayGame() {
 		gameBoard.printDisplayBoard();

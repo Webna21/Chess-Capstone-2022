@@ -1,23 +1,28 @@
 package game;
 
-import java.util.ArrayList;
-
 import enums.*;
 
 public class Testing {
 	public static void main(String[] args) {
-		Game game1 = new Game(Side.WHITE);
-		ArrayList<Move> moves = new ArrayList<Move>();
-		for(BoardSquare i: BoardSquare.values()) {
-			if(game1.getBoard().getTile(i).getPiece().getPossibleMoveList(game1.getBoard()).size() != 0) {
-				ArrayList<Move> a = game1.getBoard().getTile(i).getPiece().getPossibleMoveList(game1.getBoard());
-				for(Move j: a) {
-					moves.add(j);
-				}
-			}
-		}
-		System.out.println(moves);
-		System.out.println(moves.size());
-		game1.printDisplayGame();
+		Game a = new Game(Side.WHITE);
+		Game b = new Game(Side.WHITE);
+		b.setBoard(a.getBoard());
+		b.setScoreSheet(a.getScoreSheet());
+		b.setBCheckStatus(a.getBCheckStatus());
+		b.setWCheckStatus(a.getWCheckStatus());
+		b.setCurrentTurn(a.getCurrentTurn());
+		b.setLastSideMover(a.getLastSideMover());
+		b.setNumMoves(a.getNumMoves());
+		
+		
+		
+		
+		a.movePiece(a.getBoard(), BoardSquare.e2, BoardSquare.e4);
+		b.movePiece(b.getBoard(),BoardSquare.d2, BoardSquare.d4);
+		System.out.println("a:");
+		a.printDisplayGame();
+		System.out.println("b:");
+		b.printDisplayGame();
+		
 	}
 }

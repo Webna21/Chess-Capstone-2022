@@ -25,10 +25,10 @@ public class ChessTextRunner {
 			String currentMover = String.valueOf(a.getCurrentTurn()).substring(0,1).toLowerCase();
 			if(a.getBoard().getBotSide() == Side.WHITE) {
 				System.out.println("FEN: " + FEN.WhiteToFEN(a.getBoard().displayBoardtoArrayList()) + " " + currentMover + " " + a.castlingForFEN());
-				System.out.println("url: " + "https://lichess.org/analysis/" + FEN.WhiteToFEN(a.getBoard().displayBoardtoArrayList()) + "_" + currentMover + "_" + a.castlingForFEN());			
+//				System.out.println("url: " + "https://lichess.org/analysis/" + FEN.WhiteToFEN(a.getBoard().displayBoardtoArrayList()) + "_" + currentMover + "_" + a.castlingForFEN());			
 			} else {
 				System.out.println("FEN: " + FEN.BlackToFEN(a.getBoard().displayBoardtoArrayList()) + " " + currentMover + " " + a.castlingForFEN());
-				System.out.println("url: " + "https://lichess.org/analysis/" + FEN.BlackToFEN(a.getBoard().displayBoardtoArrayList()) + "_" + currentMover + "_" + a.castlingForFEN());
+//				System.out.println("url: " + "https://lichess.org/analysis/" + FEN.BlackToFEN(a.getBoard().displayBoardtoArrayList()) + "_" + currentMover + "_" + a.castlingForFEN());
 			}
 			System.out.println("PGN: " + PGN.toPGN(a.getScoreSheet()));
 			System.out.println("-----------------------------------------------------------");

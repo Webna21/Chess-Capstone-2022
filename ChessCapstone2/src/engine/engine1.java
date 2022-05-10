@@ -8,8 +8,8 @@ import enums.PieceType;
 import enums.Side;
 import game.Game;
 
-public class RandomMoverWithCapture {
-	public static Move makeRandomMoveWithCapture(Game game, Side side){
+public class engine1 {
+	public static Move moveEngine1(Game game, Side side){
 		ArrayList<Move> moves = new ArrayList<Move>();
 		ArrayList<Move> captureMoves = new ArrayList<Move>();
 		

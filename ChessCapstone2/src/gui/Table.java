@@ -30,6 +30,10 @@ public class Table {
     private Tile sourceTile;
     private Tile destinationTile;
     private Piece movingPiece;
+    
+    private Side mySide;
+    private Side computerSide;
+    boolean withEngine;
 	
 	private final static Dimension OUTER_FRAME_DIMENSION = new Dimension(700,700);
 	private final static Dimension BOARD_PANEL_DIMENSION = new Dimension(400,350);
@@ -41,18 +45,33 @@ public class Table {
     private int c = 0;
 	
 	public Table() {
-		/*
+		
 		Scanner sc = new Scanner(System.in);
 		System.out.println("Select Player1 Side. (white/black)");
 		String whichSide = sc.nextLine();
-		if(whichSide.equals("black")) ChessGame = new Game(Side.BLACK);
-		else if (whichSide.equals("white")) ChessGame = new Game(Side.WHITE);
-		else {
+		if(whichSide.equalsIgnoreCase("black")) {
+			mySide = Side.BLACK; 
+			computerSide = Side.WHITE;
+		}
+		else if(whichSide.equalsIgnoreCase("white")) {
+			mySide = Side.WHITE; 
+			computerSide = Side.BLACK;
+		} else {
 			System.out.println("invalid input");
 			System.exit(-1);
 		}
-		*/
-		ChessGame = new Game(Side.WHITE);
+		System.out.println("Play against engine? (yes/no)");
+		String engineAnswer = sc.nextLine();
+		if(engineAnswer.equalsIgnoreCase("yes")) {
+			withEngine = true;
+		} else if(engineAnswer.equalsIgnoreCase("no")) {
+			withEngine = false;
+		} else {
+			System.out.println("invalid input");
+			System.exit(-1);
+		}
+		sc.close();
+		ChessGame = new Game(mySide);
 		
 		this.gameFrame = new JFrame("ChessGUI");
 		this.gameFrame.setLayout(new BorderLayout());
@@ -152,13 +171,9 @@ public class Table {
 							public void run() {
 								boardPanel.drawBoard(ChessGame.getBoard());
 								printDisplayTable();
-								//engine
-								if(ChessGame.getCurrentTurn() == Side.BLACK) {
-									Move toMove = RandomMoverWithCapture.makeRandomMoveWithCapture(ChessGame, Side.BLACK);
-									ChessGame.movePiece(ChessGame.getBoard(),toMove.getPrev(), toMove.getDest());
-								} else if(ChessGame.getCurrentTurn() == Side.WHITE) {
-									Move toMove = RandomMoverWithCapture.makeRandomMoveWithCapture(ChessGame, Side.WHITE);
-									ChessGame.movePiece(ChessGame.getBoard(),toMove.getPrev(), toMove.getDest());
+								if(withEngine) {
+									engine1MoverWhite();
+									engine1MoverBlack();
 								}
 							}
 						});
@@ -198,6 +213,27 @@ public class Table {
 		private void assignTileColor() {
 			if(BoardSquare.getRank(square) % 2 == 0) setBackground(Integer.parseInt(BoardSquare.valueOf(square).substring(0,1)) % 2 != 0 ? lightTileColor : darkTileColor);
 			if(BoardSquare.getRank(square) % 2 != 0) setBackground(Integer.parseInt(BoardSquare.valueOf(square).substring(0,1)) % 2 == 0 ? lightTileColor : darkTileColor);
+		}
+	}
+	public void engine1MoverBothSides() {
+		if(ChessGame.getCurrentTurn() == Side.BLACK) {
+			Move toMove = engine1.moveEngine1(ChessGame, Side.BLACK);
+			ChessGame.movePiece(ChessGame.getBoard(),toMove.getPrev(), toMove.getDest());
+		} else if(ChessGame.getCurrentTurn() == Side.WHITE) {
+			Move toMove = engine1.moveEngine1(ChessGame, Side.WHITE);
+			ChessGame.movePiece(ChessGame.getBoard(),toMove.getPrev(), toMove.getDest());
+		}
+	}
+	public void engine1MoverWhite() {
+		if(ChessGame.getCurrentTurn() == Side.WHITE && computerSide == Side.WHITE) {
+			Move toMove = engine1.moveEngine1(ChessGame, Side.WHITE);
+			ChessGame.movePiece(ChessGame.getBoard(),toMove.getPrev(), toMove.getDest());
+		}
+	}
+	public void engine1MoverBlack() {
+		if(ChessGame.getCurrentTurn() == Side.BLACK && computerSide == Side.BLACK) {
+			Move toMove = engine1.moveEngine1(ChessGame, Side.BLACK);
+			ChessGame.movePiece(ChessGame.getBoard(),toMove.getPrev(), toMove.getDest());
 		}
 	}
 	public void printTable() {

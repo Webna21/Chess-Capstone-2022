@@ -45,6 +45,18 @@ public class Board {
 		setQueens();
 		setKings();
 	}
+	public ArrayList<Move> getPossibleMovesList(Side side){
+		ArrayList<Move> moves = new ArrayList<Move>();
+		for(BoardSquare i: BoardSquare.values()) {
+			if(this.getTile(i).getPiece().getPossibleMoveList(this).size() != 0 && this.getTile(i).getPiece().getSide() == side) {
+				ArrayList<Move> pieceMoves = this.getTile(i).getPiece().getPossibleMoveList(this);
+				for(Move j: pieceMoves) {
+					moves.add(j);
+				}
+			}
+		}
+		return moves;
+	}
 	public Tile[][] getTileBoard(){
 		return tileBoard;
 	}
