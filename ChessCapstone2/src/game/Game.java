@@ -51,8 +51,8 @@ public class Game {
 	public void setBCheckStatus(boolean check) {
 		bCheckStatus = check;
 	}
-	public void movePiece(BoardSquare x, BoardSquare y) {
-		if(moveLegality(x,y) && currentTurn != Side.NEUTRAL) {
+	public void movePiece(Board board,BoardSquare x, BoardSquare y) {
+		if(moveLegality(board,x,y) && currentTurn != Side.NEUTRAL) {
 			if(currentTurn == Side.WHITE) numMoves++;
 			if(currentTurn != Side.NEUTRAL) lastSideMover = currentTurn;
 			moveInspection(x,y);
@@ -65,6 +65,9 @@ public class Game {
 			}
 			
 		} else System.out.println("illegal move");
+	}
+	public void movePiece(Board board,Move move) {
+		movePiece(board,move.getPrev(),move.getDest());
 	}
 	public void castleKing(BoardSquare x, BoardSquare y) {
 		if(SpecificPieceLegalityCheck.castleLegality(this, x, y) && gameBoard.getTile(x).getPiece().getSide() == currentTurn) {
@@ -140,7 +143,7 @@ public class Game {
 		}
 		inspectCheckStatus();
 	}
-	public boolean moveLegality(BoardSquare x, BoardSquare y) {
+	public boolean moveLegality(Board board,BoardSquare x, BoardSquare y) {
 		//only move whoevers turns it is pieces
 		if(gameBoard.getTile(x).getPiece().getSide() != currentTurn) return false;
 		//cannot capture own pieces
@@ -148,7 +151,7 @@ public class Game {
 		//if pawn, cannot capture moving forward
 		if(gameBoard.getTile(x).getPiece().getPieceType() == PieceType.PAWN && gameBoard.getTile(y).getPiece().getSide() == (currentTurn == Side.WHITE ? Side.BLACK : Side.WHITE));
 		//check basic legality
-		if(gameBoard.getTile(x).getPiece().checkBasicLegality(y) == false) return false;
+		if(gameBoard.getTile(x).getPiece().checkBasicLegality(board,y) == false) return false;
 		//check checkstatus'
 		
 		
@@ -218,6 +221,9 @@ public class Game {
 		if(gameBoard.getTile(x).getPiece().getPieceType() == PieceType.PAWN) move.deleteCharAt(0);
 		if(currentTurn == Side.WHITE) move.insert(0,numMoves + ".");
 		scoreSheet.add(move.toString());
+	}
+	public Game copyOfGame() {
+		return this;
 	}
 	public String castlingForFEN() {
 		String a = "";
