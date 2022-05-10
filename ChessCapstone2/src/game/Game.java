@@ -34,15 +34,6 @@ public class Game {
 		wCheckStatus = false; 
 		bCheckStatus = false;
 	}
-	public Game(Game game) {
-		gameBoard = game.getBoard();
-		scoreSheet = game.getScoreSheet();
-		numMoves = game.getNumMoves();
-		currentTurn = game.getCurrentTurn();
-		wCheckStatus = game.getWCheckStatus();
-		bCheckStatus = game.getBCheckStatus();
-		lastSideMover = game.getLastSideMover();
-	}
 	public Side getCurrentTurn() {
 		return currentTurn;
 	}
