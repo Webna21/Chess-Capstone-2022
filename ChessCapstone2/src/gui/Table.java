@@ -22,7 +22,7 @@ import other.PGN;
 import pieces.*;
 
 public class Table {
-	
+	//JFrame GUI is from https://www.youtube.com/watch?v=h8fSdSUKttk&list=PLOJzCFLZdG4zk5d-1_ah2B4kqZSeIlWtt, everything else by me, Andrew Lis
 	private final JFrame gameFrame;
 	private final BoardPanel boardPanel;
     private Game ChessGame;
@@ -33,7 +33,8 @@ public class Table {
     
     private Side mySide;
     private Side computerSide;
-    boolean withEngine;
+    private boolean withEngine;
+    private boolean onlyEngine;
 	
 	private final static Dimension OUTER_FRAME_DIMENSION = new Dimension(700,700);
 	private final static Dimension BOARD_PANEL_DIMENSION = new Dimension(400,350);
@@ -47,8 +48,12 @@ public class Table {
 	public Table() {
 		
 		Scanner sc = new Scanner(System.in);
-		System.out.println("Select Player1 Side. (white/black)");
-		String whichSide = sc.nextLine();
+		String whichSide;
+		do {
+			System.out.println("Select Player1 Side. (white/black/none)");
+			whichSide = sc.nextLine();
+		} while(!whichSide.equalsIgnoreCase("black") && !whichSide.equalsIgnoreCase("white") && !whichSide.equalsIgnoreCase("none"));
+		
 		if(whichSide.equalsIgnoreCase("black")) {
 			mySide = Side.BLACK; 
 			computerSide = Side.WHITE;
@@ -56,19 +61,21 @@ public class Table {
 		else if(whichSide.equalsIgnoreCase("white")) {
 			mySide = Side.WHITE; 
 			computerSide = Side.BLACK;
-		} else {
-			System.out.println("invalid input");
-			System.exit(-1);
+		} else if(whichSide.equalsIgnoreCase("none")) {
+			onlyEngine = true;
 		}
-		System.out.println("Play against engine? (yes/no)");
-		String engineAnswer = sc.nextLine();
-		if(engineAnswer.equalsIgnoreCase("yes")) {
-			withEngine = true;
-		} else if(engineAnswer.equalsIgnoreCase("no")) {
-			withEngine = false;
-		} else {
-			System.out.println("invalid input");
-			System.exit(-1);
+		if(!onlyEngine) {
+			String engineAnswer;
+			do {
+				System.out.println("Play against engine? (yes/no)");
+				engineAnswer = sc.nextLine();
+			} while(!engineAnswer.equalsIgnoreCase("yes") && !engineAnswer.equalsIgnoreCase("no"));
+			
+			if(engineAnswer.equalsIgnoreCase("yes")) {
+				withEngine = true;
+			} else if(engineAnswer.equalsIgnoreCase("no")) {
+				withEngine = false;
+			}
 		}
 		sc.close();
 		ChessGame = new Game(mySide);
@@ -174,6 +181,8 @@ public class Table {
 								if(withEngine) {
 									engine1MoverWhite();
 									engine1MoverBlack();
+								} else if(onlyEngine) {
+									engine1MoverBothSides();
 								}
 							}
 						});
