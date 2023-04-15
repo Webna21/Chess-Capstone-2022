@@ -2,9 +2,7 @@ package game;
 
 import java.util.*;
 import enums.*;
-import pieces.Empty;
-import pieces.King;
-import pieces.Queen;
+import pieces.*;
 
 public class Game {
 	private Board gameBoard;
